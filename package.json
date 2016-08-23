@@ -1,0 +1,57 @@
+{
+  "name": "festival",
+  "version": "0.0.1",
+  "description": "",
+  "main": "build/",
+  "scripts": {
+    "start": "node build/server/",
+    "build": "babel --presets es2015,react source/ -d build/",
+    "copy": "cp -r ./source/client/style ./build/client/style",
+    "clean": "rm -rf ./build/",
+    "bundle": "webpack --progress --colors build/client/main.js build/client/bundle/main.js",
+    "watch": "nodemon -e js,jsx,png,css,sass,scss,json --watch source/ --exec \"npm run clean && npm run build --silent && npm run bundle --silent && npm run copy --silent && npm run start --silent\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dodekeract/festival.git"
+  },
+  "author": "Florian Wendelborn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dodekeract/festival/issues"
+  },
+  "homepage": "https://github.com/dodekeract/festival#readme",
+  "dependencies": {
+    "clarifai": "^1.2.1",
+    "co-busboy": "^1.3.1",
+    "file-size": "^1.0.0",
+    "flux": "^2.1.1",
+    "koa": "^1.2.1",
+    "koa-body": "^1.4.0",
+    "koa-generic-session": "^1.11.3",
+    "koa-json": "^1.1.3",
+    "koa-monitor": "^0.2.3",
+    "koa-router": "^5.4.0",
+    "koa-send": "^3.2.0",
+    "koa-session-mongoose": "^1.0.0",
+    "koa-static": "^2.0.0",
+    "mongoose": "^4.5.9",
+    "mongoose-id-validator": "^0.3.0",
+    "neo-async": "^2.0.0",
+    "pbkdf2": "^3.0.4",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-mini-router": "^2.0.0",
+    "superagent": "^2.2.0",
+    "sweetalert2": "^4.1.9",
+    "validator": "^5.5.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "nodemon": "^1.10.2",
+    "webpack": "^1.13.2"
+  }
+}
