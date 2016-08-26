@@ -1,15 +1,50 @@
 // import external
 
 import koaRouter from 'koa-router';
+import koaBody from 'koa-body';
 import async from 'neo-async';
 
 // import internal
 
-import {Collection} from '../../../../database/models';
+import {Collection, Item} from '../../../../database/models';
+import {isAdmin} from '../../../../utilities/security';
 
 // code
 
 const router = koaRouter();
+const body = koaBody();
+
+router.post('/', isAdmin, body, function * () {
+	const {description, parent, title} = this.request.body;
+
+	const created = new Collection({
+		title,
+		parent,
+		description,
+		children: [],
+		items: []
+	});
+
+	try {
+		yield created.save();
+		yield Collection.findOne({
+			_id: parent
+		}).then(parent => {
+			parent.children.push(created._id);
+			return parent.save();
+		});
+		this.body = {
+			success: true,
+			_id: created._id
+		};
+	} catch (error) {
+		this.body = {
+			error: 'something went wrong'
+		};
+		this.status = 500;
+		console.error(error);
+	}
+});
 
 router.get('/', handleCollection);
 router.get('/:_id', handleCollection);
@@ -21,33 +56,40 @@ function * handleCollection () {
 	let item;
 	if (_id) {
 		item = yield Collection.findOne({_id});
-		this.body = yield loadNames(item);
 	} else {
 		item = yield Collection.findOne({
 			role: 'root'
 		});
 	}
 	if (!_id && !item) {
-		const item = new Collection({
-			title: 'All Media',
-			description: 'All Media Files',
-			role: 'root',
-			children: [],
-			items: []
-		});
-		console.warn('creating root collection');
-		item.save().catch(console.error);
 		this.body = {
-			error: 'creating root collection'
+			error: 'missing root collection'
 		};
 		this.status = 500;
 	} else {
 		const names = yield loadNames(item);
+		const cleanChild = data => {
+			return {
+				title: data.title,
+				_id: data._id,
+				firstChild: data.items[0] || false
+			};
+		};
+		const cleanItem = data => {
+			return {
+				title: data.title,
+				_id: data._id,
+				tags: data.tags,
+				fileType: data.fileType
+			};
+		};
 		this.body = {
 			title: item.title,
 			description: item.description,
-			children: names[0].map(item => item.title),
-			items: names[1].map(item => item.title)
+			children: names[0].map(cleanChild),
+			items: names[1].map(cleanItem),
+			_id: item._id,
+			parent: item.parent
 		};
 	}
 }
@@ -55,13 +97,12 @@ function * handleCollection () {
 // helper methods
 
 function loadNames (item) {
-	console.log('attempting to load names of', item.children, item.items);
 	return new Promise((resolve, reject) => {
 		async.map(item.children, (_id, index, done) => {
 			Collection.findOne({_id}, done);
 		}, (error, result) => {
 			async.map(item.items, (_id, index, done) => {
-				Items.findOne({_id}, done);
+				Item.findOne({_id}, done);
 			}, (error2, result2) => {
 				if (error || error2) return reject(error || error2);
 				resolve([result, result2]);

@@ -5,11 +5,10 @@ import {navigate} from 'react-mini-router';
 
 // import internal
 
-import Store from '../utilities/store';
-
+import actions from '../actions/main';
 import dispatcher from '../dispatchers/main';
 import mCon from '../constants/main';
-import actions from '../actions/main';
+import Store from '../utilities/store';
 
 // store
 
@@ -24,18 +23,44 @@ const defaultState = () => {
 			},
 			upload: {
 				files: [],
-				key: 0
+				key: 0,
+				queue: []
 			},
 			collection: {
 				id: '',
+				_id: '',
 				title: '',
 				description: '',
 				children: [],
-				items: []
+				items: [],
+				parent: false
+			},
+			image: {
+				id: '',
+				tags: [],
+				title: '',
+				description: ''
+			},
+			video: {
+				id: '',
+				tags: [],
+				title: '',
+				description: ''
 			}
 		}
 	};
 };
+
+function throttle (fn, delay) {
+	let timer = null;
+	return function () {
+		let context = this, args = arguments;
+		clearTimeout(timer);
+		timer = setTimeout(function () {
+			fn.apply(context, args);
+		}, delay);
+	};
+}
 
 store.dispatchToken = dispatcher.register(action => {
 	const {data, type, id} = action;
@@ -53,7 +78,9 @@ store.dispatchToken = dispatcher.register(action => {
 		// collection view
 
 		case mCon.view.collection.setId:
-			state.view.collection.id = data;
+			state.view.collection = Object.assign(defaultState().view.collection, {
+				id: data
+			});
 			request
 				.get(`/api/v1.0/collection/${state.view.collection.id || ''}`)
 				.end((error, response) => {
@@ -64,7 +91,37 @@ store.dispatchToken = dispatcher.register(action => {
 		break;
 
 		case mCon.view.collection.create:
-			console.log(`creating ${data}`);
+			request
+				.post(`/api/v1.0/collection/`)
+				.send({
+					title: data,
+					parent: state.view.collection._id,
+					description: ''
+				})
+				.end((error, response) => {
+					if (error) {
+						sweetAlert(`Couldn't Save`, `Something went wrong trying to save. Perhaps the title isn't unique?`, 'error');
+						return console.error(error);
+					}
+					navigate(`/${response.body._id}`);
+					console.info(response);
+				});
+		break;
+
+		case mCon.view.collection.upload:
+			navigate('/upload');
+			setTimeout(() => {
+				if (!state.view.upload.files.length) return sweetAlert('No Files Selected', 'Use the upload tab to select files.', 'error');
+				actions.view.upload.queueAll();
+			}, 0);
+		break;
+
+		case mCon.view.collection.changeTitle:
+			state.view.collection.title = data;
+		break;
+
+		case mCon.view.collection.changeDescription:
+			state.view.collection.description = data;
 		break;
 
 		// login view
@@ -100,6 +157,50 @@ store.dispatchToken = dispatcher.register(action => {
 
 		// upload
 
+		case mCon.view.upload.queueAll:
+			state.view.upload.queue = state.view.upload.files.map(item => {
+				delete item.preview;
+				item.percent = 0;
+				item.parent = {
+					_id: state.view.collection._id,
+					title: state.view.collection.title
+				};
+				return item;
+			});
+			state.view.upload.files = [];
+			setTimeout(actions.view.upload.one, 0);
+		break;
+
+		case mCon.view.upload.one:
+			const file = state.view.upload.queue[0];
+			console.log(file);
+			request
+				.post(`/api/v1.0/media/`)
+				.attach('file', file.file)
+				.field('title', file.title)
+				.field('description', file.description)
+				.field('parent', file.parent._id)
+				.on('progress', throttle(function (e) {
+					file.percent = e.percent;
+					console.log(e.percent);
+					store.emitChange();
+				}, 25))
+				.end((error, response) => {
+					if (error) return console.error(error);
+					console.info(response);
+					state.view.upload.queue.shift();
+					store.emitChange();
+					if (state.view.upload.queue.length) {
+						actions.view.upload.one();
+					} else {
+						sweetAlert({
+							title: 'Upload finished!',
+							type: 'success'
+						});
+					}
+				});
+		break;
+
 		case mCon.view.upload.files.add:
 			uploadElement.click();
 		break;
@@ -133,6 +234,10 @@ store.dispatchToken = dispatcher.register(action => {
 			}
 		break;
 
+		case mCon.view.upload.files.selectFolder:
+			navigate(`/${state.view.collection._id}`);
+		break;
+
 		case mCon.view.upload.files.clear:
 			state.view.upload.files = [];
 		break;
@@ -147,6 +252,34 @@ store.dispatchToken = dispatcher.register(action => {
 
 		case mCon.view.upload.item.changeDescription:
 			state.view.upload.files[id].description = data;
+		break;
+
+		// image
+
+		case mCon.view.image.setId:
+			state.view.image.id = data;
+			request
+				.get(`/api/v1.0/meta/${state.view.image.id}`)
+				.end((error, response) => {
+					if (error) return console.error(error);
+					Object.assign(state.view.image, response.body);
+					console.info(state.view.image);
+					store.emitChange();
+				});
+		break;
+
+		// video
+
+		case mCon.view.video.setId:
+			state.view.video.id = data;
+			request
+				.get(`/api/v1.0/meta/${state.view.video.id}`)
+				.end((error, response) => {
+					if (error) return console.error(error);
+					Object.assign(state.view.video, response.body);
+					console.info(state.view.video);
+					store.emitChange();
+				});
 		break;
 
 		// session

@@ -23,7 +23,7 @@ export default class Header extends React.Component {
 				);
 				items[1].push(
 					<li key={i[1]++} className="nav-item">
-						<a className="nav-link" onClick={actions.session.destroy}>Logout (Admin)</a>
+						<a className="nav-link" onClick={actions.session.destroy}>Logout</a>
 					</li>
 				);
 			} else {
@@ -44,15 +44,13 @@ export default class Header extends React.Component {
 		return (
 			<header>
 				<nav className="navbar navbar-static-top navbar-dark bg-inverse custom-no-border">
-					<div className="container">
-						<a className="navbar-brand" href="#!/">{state.info.name}</a>
-						<ul className="nav navbar-nav">
-							{items[0]}
-						</ul>
-						<ul className="nav navbar-nav pull-xs-right">
-							{items[1]}
-						</ul>
-					</div>
+					<a className="navbar-brand" href="#!/">{state.info.name}</a>
+					<ul className="nav navbar-nav">
+						{items[0]}
+					</ul>
+					<ul className="nav navbar-nav pull-xs-right">
+						{items[1]}
+					</ul>
 				</nav>
 			</header>
 		);

@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import http from 'http';
 import koa from 'koa';
 import koaStatic from 'koa-static';
+import koaMount from 'koa-mount';
 import path from 'path';
 import mongoose from 'mongoose';
 
@@ -11,6 +12,7 @@ import mongoose from 'mongoose';
 
 import config from './config';
 import router from './routes';
+import {Collection} from './database/models';
 
 // server
 
@@ -53,4 +55,25 @@ if (config.json.pretty) {
 }
 
 app.use(koaStatic(path.join(__dirname, '../client/')));
+// app.use(koaMount('/api/v1.0/temporary/', koaStatic(config.storage.temporary)));
 app.use(router.routes(), router.allowedMethods());
+
+// initial setup
+
+Collection.findOne({
+	role: 'root'
+}).then(item => {
+	if (!item) {
+		const item = new Collection({
+			title: 'All Media',
+			description: 'All Media Files',
+			role: 'root',
+			children: [],
+			items: []
+		});
+		console.warn('creating root collection');
+		item.save().catch(console.error);
+	} else {
+		console.info('root collection exists');
+	}
+});

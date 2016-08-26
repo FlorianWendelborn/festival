@@ -10,29 +10,33 @@ mongoose.Promise = Promise;
 export const collectionSchema = new Schema({
 	title: {
 		type: String,
-		required: true,
-		unique: false
+		required: true
 	},
 	description: {
 		type: String,
-		required: false,
-		unique: false
+		default: ''
 	},
 	role: String,
+	parent: {
+		type: Schema.Types.ObjectId,
+		ref: 'collection'
+	},
 	children: [{
-		id: {
-			type: Schema.Types.ObjectId,
-			ref: 'collection',
-			required: true
-		}
+		type: Schema.Types.ObjectId,
+		ref: 'collection',
+		required: true
 	}],
 	items: [{
-		id: {
-			type: Schema.Types.ObjectId,
-			ref: 'item',
-			required: true
-		}
+		type: Schema.Types.ObjectId,
+		ref: 'item',
+		required: true
 	}]
+});
+collectionSchema.index({
+	parent: 1,
+	title: 1
+}, {
+	unique: true
 });
 collectionSchema.plugin(isValidId);
 
@@ -46,11 +50,15 @@ export const itemSchema = new Schema({
 	description: {
 		type: String,
 		default: '',
-		required: true,
 		unique: false
 	},
 	fileType: {
 		type: String,
+		required: true
+	},
+	parent: {
+		type: Schema.Types.ObjectId,
+		ref: 'collection',
 		required: true
 	},
 	tags: {
@@ -58,10 +66,15 @@ export const itemSchema = new Schema({
 		default: [],
 		required: true,
 		unique: false
+	},
+	original: {
+		hash: {
+			type: String,
+			unique: true
+		}
 	}
 });
-
-
+itemSchema.plugin(isValidId);
 
 export const temporarySchema = new Schema({
 	mimeType: {
@@ -71,18 +84,48 @@ export const temporarySchema = new Schema({
 	},
 	stage: {
 		type: Number,
-		required: true,
 		default: 0
 	},
-	name: {
+	title: {
 		type: String,
 		required: true,
 		unique: false
 	},
+	original: {
+		hash: {
+			type: String
+		},
+		lastModified: {
+			type: String
+		},
+		name: {
+			type: String
+		}
+	},
+	description: {
+		type: String,
+		default: ''
+	},
+	parent: {
+		type: Schema.Types.ObjectId,
+		ref: 'collection',
+		required: true
+	},
+	path: {
+		type: String,
+		required: true,
+		unique: true
+	},
+	thumbnailPath: {
+		type: String
+	},
+	screenshots: [{
+		type: String
+	}],
 	tags: {
 		type: [String],
 		default: [],
-		required: true,
 		unique: false
 	}
 });
+temporarySchema.plugin(isValidId);

@@ -9,10 +9,6 @@ import Client from './components/main';
 import store from './stores/main';
 import actions from './actions/main';
 
-// webcrypto
-
-window.crypt = window.crypto.subtle || window.crypto.webkitSubtle || window.crypto.msSubtle;
-
 // run
 
 window.addEventListener('load', () => {

@@ -1,34 +1,55 @@
 // import external
 
 import koaRouter from 'koa-router';
-import send from 'koa-send';
+import stream from 'koa-stream';
+import koaBody from 'koa-body';
 import path from 'path';
 import fs from 'fs';
-import parse from 'co-busboy';
-import os from 'os';
 
 // import internal
 
+import {checkTemporary} from '../../../../utilities/temporary';
+import {isAdmin} from '../../../../utilities/security';
+import {Temporary} from '../../../../database/models';
 import config from '../../../../config';
 
 // code
 
 const router = koaRouter();
+const body = koaBody({
+	multipart: true,
+	formidable: {
+		uploadDir: config.storage.temporary,
+		keepExtensions: true
+	}
+});
 
 router.get('/:id', function * () {
-	yield send(this, this.params.id, {
-		root: config.storage.path
+	yield stream.file(this, this.params.id, {
+		root: config.storage.permanent,
+		allowDownload: true
 	});
 });
 
-router.post('/', function * () {
-	const parts = parse(this);
-	const part = yield parts;
-
-	const stream = fs.createWriteStream(path.join(os.tmpdir(), Math.random().toString()));
-	part.pipe(stream);
-	console.log(`uploading ${part.filename}/${part.fieldname}/${part.mimeType} -> ${stream.path}`);
-	console.log(Object.keys(part));
+router.post('/', isAdmin, body, function * () {
+	const {description, parent, title} = this.request.body.fields;
+	const file = this.request.body.files.file;
+	const dbObject = new Temporary({
+		title,
+		description,
+		path: file.path,
+		mimeType: file.type,
+		parent,
+		original: {
+			lastModified: file.lastModifiedDate,
+			name: file.name
+		}
+	});
+	yield dbObject.save();
+	this.body = {
+		success: true
+	};
+	checkTemporary();
 });
 
 // export

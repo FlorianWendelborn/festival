@@ -12,19 +12,31 @@ export default {
 		},
 		upload: {
 			files: {
-				add: 'view.uploads.files.add',
-				added: 'view.uploads.files.added',
-				clear: 'view.uploads.files.clear'
+				add: 'view.upload.files.add',
+				added: 'view.upload.files.added',
+				clear: 'view.upload.files.clear',
+				selectFolder: 'view.upload.files.selectFolder'
 			},
 			item: {
-				changeTitle: 'view.uploads.item.changeTitle',
-				changeDescription: 'view.uploads.item.changeDescription',
-				remove: 'view.uploads.item.remove'
-			}
+				changeTitle: 'view.upload.item.changeTitle',
+				changeDescription: 'view.upload.item.changeDescription',
+				remove: 'view.upload.item.remove'
+			},
+			queueAll: 'view.upload.queueAll',
+			one: 'view.upload.one'
 		},
 		collection: {
 			setId: 'view.collection.setId',
-			create: 'view.collection.create'
+			create: 'view.collection.create',
+			upload: 'view.collection.upload',
+			changeTitle: 'view.collection.changeTitle',
+			changeDescription: 'view.collection.changeDescription'
+		},
+		image: {
+			setId: 'view.image.setId'
+		},
+		video: {
+			setId: 'view.video.setId'
 		}
 	},
 	session: {

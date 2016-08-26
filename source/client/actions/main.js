@@ -66,6 +66,12 @@ export default {
 							type: c.view.upload.files.clear
 						});
 					});
+				},
+
+				selectFolder () {
+					d.dispatch({
+						type: c.view.upload.files.selectFolder
+					});
 				}
 			},
 			item: {
@@ -89,6 +95,16 @@ export default {
 						data
 					});
 				}
+			},
+			queueAll () {
+				d.dispatch({
+					type: c.view.upload.queueAll
+				});
+			},
+			one () {
+				d.dispatch({
+					type: c.view.upload.one
+				});
 			}
 		},
 		collection: {
@@ -114,6 +130,48 @@ export default {
 						type: c.view.collection.create,
 						data
 					});
+				});
+			},
+
+			upload () {
+				d.dispatch({
+					type: c.view.collection.upload
+				});
+			},
+
+			changeTitle () {
+				d.dispatch({
+					type: c.view.collection.changeTitle,
+					data: e.target.value
+				});
+			},
+
+			changeDescription () {
+				d.dispatch({
+					type: c.view.collection.changeDescription,
+					data: e.target.value
+				});
+			},
+
+			save () {
+				d.dispatch({
+					type: c.view.collection.save
+				});
+			}
+		},
+		image: {
+			setId (data) {
+				d.dispatch({
+					type: c.view.image.setId,
+					data
+				});
+			}
+		},
+		video: {
+			setId (data) {
+				d.dispatch({
+					type: c.view.video.setId,
+					data
 				});
 			}
 		}
