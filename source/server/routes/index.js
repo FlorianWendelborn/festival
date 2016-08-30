@@ -15,7 +15,7 @@ const router = koaRouter();
 
 router.use('/api/v1.0', apiRouter.routes(), apiRouter.allowedMethods());
 
-router.get('/', session, function * () {
+router.get('/', session, function* () {
 	this.body = renderMain(this.session);
 });
 

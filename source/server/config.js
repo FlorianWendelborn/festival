@@ -1,19 +1,19 @@
-export default {
+export default Object.assign({
 	listen: {
 		address: '127.0.0.1',
-		port: '8080',
+		port: 40000,
 		publicUrl: 'https://example.com'
 	},
 	info: {
-		name: 'Grabow Vision Media',
+		name: 'Festival',
 		link: 'https://example.com'
 	},
 	json: {
 		pretty: true
 	},
 	storage: {
-		path: '/Users/dodekeract/code/festival/storage/permanent',
-		temporary: '/Users/dodekeract/code/festival/storage/temporary'
+		permanent: __dirname + '/../../storage/permanent',
+		temporary: __dirname + '/../../storage/temporary'
 	},
 	monitor: {
 		active: true,
@@ -24,8 +24,8 @@ export default {
 		debug: true
 	},
 	clarifai: {
-		id: '',
-		secret: ''
+		id: 'clarifai-id',
+		secret: 'clarifai-secret'
 	},
 	session: {
 		keys: ['IMPORTANT: CHANGE THIS STRING, OTHERWISE YOUR SERVER CAN BE COMPROMISED EASILY'],
@@ -39,4 +39,4 @@ export default {
 		user: 'user',
 		password: 'user'
 	}
-}
+}, require('../../config.json'));

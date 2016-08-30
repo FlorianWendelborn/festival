@@ -11,7 +11,7 @@ import config from '../../../../config';
 
 const router = koaRouter();
 
-router.get('/:id', function * () {
+router.get('/:id', function* () {
 	yield stream.file(this, this.params.id, {
 		root: config.storage.temporary,
 		allowDownload: true

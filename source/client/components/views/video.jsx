@@ -29,7 +29,7 @@ export default class ImageView extends React.Component {
 			<main className="container">
 				<h3><button onClick={this.back.bind(this)} className="btn btn-primary">Back To Collection</button> {state.title}</h3>
 				<p>{state.description} {tags}</p>
-				<video style={{width: '100%'}} autoPlay="true" controls="true" autoPlay="true" poster={`/api/v1.0/media/${id}.jpg`}>
+				<video style={{width: '100%'}} autoPlay="true" controls="true" autoPlay="true" poster={`/api/v1.0/media/${id}-s-2.jpg`}>
 					<source src={`/api/v1.0/media/${id}.mp4`} type="video/mp4"/>
 				</video>
 			</main>

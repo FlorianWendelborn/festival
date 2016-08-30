@@ -3,6 +3,7 @@
 import {navigate} from 'react-mini-router';
 import React from 'react';
 import sweetAlert from 'sweetalert2';
+import ReactDisqusThread from 'react-disqus-thread';
 
 // import internal
 
@@ -51,6 +52,14 @@ export default class CollectionView extends CollectionFractal {
 					</div>
 				</div>
 				<ItemView actions={actions} state={state.view.collection}/>
+				<div className="container">
+					<ReactDisqusThread
+						shortname="grabow-vision"
+						identifier={id}
+						title={state.title}
+						url={window.location.href}
+					/>
+				</div>
 			</main>
 		);
 	}
@@ -122,8 +131,10 @@ export class Folder extends React.Component {
 	render () {
 		const {actions, state} = this.props;
 
-		const image = state.firstChild ? (
-			<img onLoad={this.didLoad.bind(this)} className="card-img" src={`/api/v1.0/media/${state.firstChild}-s.jpg`}/>
+		const firstChild = state.items[0] || false;
+
+		const image = firstChild ? (
+			<img onLoad={this.didLoad.bind(this)} className="card-img" src={`/api/v1.0/media/${firstChild}-s.jpg`}/>
 		) : (
 			<img onLoad={this.didLoad.bind(this)} className="card-img" src="https://placehold.it/512x512"/>
 		);

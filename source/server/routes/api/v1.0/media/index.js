@@ -24,14 +24,14 @@ const body = koaBody({
 	}
 });
 
-router.get('/:id', function * () {
+router.get('/:id', function* () {
 	yield stream.file(this, this.params.id, {
 		root: config.storage.permanent,
 		allowDownload: true
 	});
 });
 
-router.post('/', isAdmin, body, function * () {
+router.post('/', isAdmin, body, function* () {
 	const {description, parent, title} = this.request.body.fields;
 	const file = this.request.body.files.file;
 	const dbObject = new Temporary({

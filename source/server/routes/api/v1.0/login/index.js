@@ -12,13 +12,13 @@ import config from '../../../../config';
 const router = koaRouter();
 const body = koaBody();
 
-router.get('/', function * () {
+router.get('/', function* () {
 	this.body = {
 		isAdmin: this.session.isAdmin
 	};
 });
 
-router.put('/', body, function * () {
+router.put('/', body, function* () {
 
 	const {user, password} = this.request.body;
 
@@ -46,7 +46,7 @@ router.put('/', body, function * () {
 	}
 });
 
-router.delete('/', function * () {
+router.delete('/', function* () {
 	this.session = null;
 	this.body = {
 		success: true

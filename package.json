@@ -12,7 +12,7 @@
     "copy": "cp -r ./source/client/style ./build/client/style &",
     "status": "ls -lah build/client/bundle | grep main.js",
     "start": "node build/server/",
-    "watch": "nodemon --watch package.json -e js,jsx,png,css,sass,scss,json --watch source/ --exec \"npm run clean && npm run build --silent && npm run copy --silent && npm run bundle --silent && npm run start --silent\""
+    "watch": "nodemon --watch package.json --watch config.json -e js,jsx,png,css,sass,scss,json --watch source/ --exec \"npm run clean && npm run build --silent && npm run copy --silent && npm run bundle --silent && npm run start --silent\""
   },
   "repository": {
     "type": "git",
@@ -25,9 +25,7 @@
   },
   "homepage": "https://github.com/dodekeract/festival#readme",
   "dependencies": {
-    "babel-plugin-transform-async-to-generator": "^6.8.0",
     "clarifai": "^1.2.1",
-    "co-busboy": "^1.3.1",
     "file-size": "^1.0.0",
     "fluent-ffmpeg": "^2.1.0",
     "flux": "^2.1.1",
@@ -45,9 +43,8 @@
     "koa-stream": "^0.2.0",
     "mongoose": "^4.5.9",
     "mongoose-id-validator": "^0.3.0",
-    "neo-async": "^2.0.0",
-    "pbkdf2": "^3.0.4",
     "react": "^15.3.1",
+    "react-disqus-thread": "^0.4.0",
     "react-dom": "^15.3.1",
     "react-mini-router": "^2.0.0",
     "superagent": "^2.2.0",

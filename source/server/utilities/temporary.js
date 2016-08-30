@@ -383,7 +383,8 @@ async function step (item) {
 						output: createPath({
 							folder: 'permanent',
 							item: finished,
-							type: 'screenshot'
+							type: 'screenshot',
+							index: 0
 						})
 					});
 					await move({
@@ -391,7 +392,8 @@ async function step (item) {
 						output: createPath({
 							folder: 'permanent',
 							item: finished,
-							type: 'screenshot'
+							type: 'screenshot',
+							index: 1
 						})
 					});
 					await move({
@@ -399,7 +401,8 @@ async function step (item) {
 						output: createPath({
 							folder: 'permanent',
 							item: finished,
-							type: 'screenshot'
+							type: 'screenshot',
+							index: 2
 						})
 					});
 					await move({
@@ -407,7 +410,8 @@ async function step (item) {
 						output: createPath({
 							folder: 'permanent',
 							item: finished,
-							type: 'screenshot'
+							type: 'screenshot',
+							index: 3
 						})
 					});
 					await move({
@@ -415,7 +419,8 @@ async function step (item) {
 						output: createPath({
 							folder: 'permanent',
 							item: finished,
-							type: 'screenshot'
+							type: 'screenshot',
+							index: 4
 						})
 					});
 

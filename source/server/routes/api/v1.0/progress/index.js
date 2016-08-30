@@ -10,7 +10,7 @@ import {Temporary} from '../../../../database/models';
 
 const router = koaRouter();
 
-router.get('/', function * () {
+router.get('/', function* () {
 	const response = yield Temporary.find();
 	if (response) {
 		this.body = response;
@@ -22,7 +22,7 @@ router.get('/', function * () {
 	}
 });
 
-router.get('/:_id', function * () {
+router.get('/:_id', function* () {
 	const response = yield Temporary.findOne(this.params);
 
 	if (response) {

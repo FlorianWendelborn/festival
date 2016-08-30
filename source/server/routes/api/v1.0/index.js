@@ -13,16 +13,18 @@ import tagRouter from './tag';
 import temporaryRouter from './temporary';
 import session from '../../../utilities/session';
 
-// code
+// router
 
 const router = koaRouter();
 
+// attach routes
+
 router.use('/collection', session, isLoggedIn, collectionRouter.routes(), collectionRouter.allowedMethods());
-router.use('/login', session, loginRouter.routes(), loginRouter.allowedMethods());
-router.use('/media', session, isLoggedIn, mediaRouter.routes(), mediaRouter.allowedMethods());
-router.use('/meta', session, isLoggedIn, metaRouter.routes(), metaRouter.allowedMethods());
-router.use('/tag', session, isLoggedIn, tagRouter.routes(), tagRouter.allowedMethods());
-router.use('/temporary', temporaryRouter.routes(), temporaryRouter.allowedMethods());
+router.use('/login'     , session, /* login */ loginRouter     .routes(), loginRouter     .allowedMethods());
+router.use('/media'     , session, isLoggedIn, mediaRouter     .routes(), mediaRouter     .allowedMethods());
+router.use('/meta'      , session, isLoggedIn, metaRouter      .routes(), metaRouter      .allowedMethods());
+router.use('/tag'       , session, isLoggedIn, tagRouter       .routes(), tagRouter       .allowedMethods());
+router.use('/temporary' , /* ~for clarifai~ */ temporaryRouter .routes(), temporaryRouter .allowedMethods());
 
 // export
 
