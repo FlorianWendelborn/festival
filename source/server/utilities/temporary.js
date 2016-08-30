@@ -261,7 +261,15 @@ async function step (item) {
 		try {
 			let output;
 			switch (item.stage) {
-				case 0: // screenshot
+				case 0: // hash
+					const hash = await calculateHash({
+						input: item.path,
+						algorithm: 'sha512'
+					});
+					item.original.hash = hash;
+					advance(item, `hashsum is ${hash}`);
+				break;
+				case 1: // screenshot
 					await sanity(item.path);
 					ffmpeg()
 						.input(item.path)
@@ -283,7 +291,7 @@ async function step (item) {
 							advance(item, 'generated screenshots');
 						});
 				break;
-				case 1: // convert to mp4(h264, aac)
+				case 2: // convert to mp4(h264, aac)
 					await sanity(item.path);
 					output = createPath({
 						folder: 'temporary',
@@ -313,7 +321,7 @@ async function step (item) {
 							destroy(item, 'could not convert', error);
 						}).run();
 				break;
-				case 2: // thumbnail
+				case 3: // thumbnail
 					output = createPath({
 						item,
 						folder: 'temporary',
@@ -329,7 +337,7 @@ async function step (item) {
 						advance(item, status);
 					});
 				break;
-				case 3: // image recognition on thumbnail
+				case 4: // image recognition on thumbnail
 					await imageRecognition({
 						url: [
 							`${config.listen.publicUrl}/api/v1.0/temporary/${item._id}-s-1.jpg`,
@@ -343,13 +351,14 @@ async function step (item) {
 						advance(item, status);
 					});
 				break;
-				case 4: // finalize
+				case 5: // finalize
 					const finished = new Item({
 						title: item.title,
 						parent: item.parent,
 						description: item.description,
 						tags: item.tags,
-						fileType: 'video'
+						fileType: 'video',
+						original: item.original
 					});
 
 					await finished.save();
