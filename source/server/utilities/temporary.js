@@ -217,7 +217,8 @@ async function step (item) {
 						parent: item.parent,
 						description: item.description,
 						tags: item.tags,
-						fileType: 'image'
+						fileType: 'image',
+						original: item.original
 					});
 
 					await finished.save();
