@@ -109,11 +109,11 @@ store.dispatchToken = dispatcher.register(action => {
 		break;
 
 		case mCon.view.collection.upload:
-			if (!state.view.upload.files.length) return sweetAlert('No Files Selected', 'Use the upload tab to select files.', 'error');
-			actions.view.upload.queueAll();
 			setTimeout(() => {
 				navigate('/upload');
 			}, 0);
+			if (!state.view.upload.files.length) return sweetAlert('No Files Selected', 'Use the upload tab to select files.', 'error');
+			setTimeout(actions.view.upload.queueAll, 0);
 		break;
 
 		case mCon.view.collection.changeTitle:
