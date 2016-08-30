@@ -94,7 +94,7 @@ export async function convertImage ({input, output, width, height, quality}) {
 export async function generateThumbnail ({input, output, size, quality}) {
 	return new Promise((resolve, reject) => {
 		gm(input)
-			.resizeExact(size)
+			.resize(size)
 			.setFormat('jpg')
 			.quality(quality)
 			.write(output, error => {
