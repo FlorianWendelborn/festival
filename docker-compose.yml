@@ -1,0 +1,21 @@
+version: '3.5'
+services:
+  app:
+    build: .
+    depends_on:
+      - mongo
+    ports:
+      - 127.0.0.1:3000:80
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: festival
+    ports:
+      - 127.0.0.1:27017:27017
+    volumes:
+      - mongo:/data/db
+volumes:
+  mongo: null
