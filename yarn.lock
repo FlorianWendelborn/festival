@@ -2825,10 +2825,10 @@ mongodb@2.2.34:
     mongodb-core "2.1.18"
     readable-stream "2.2.7"
 
-mongoose-id-validator@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/mongoose-id-validator/-/mongoose-id-validator-0.3.0.tgz#4ccce2d9e2e8330f7de5f0012dc6be5255bda88f"
-  integrity sha1-TMzi2eLoMw995fABLca+UlW9qI8=
+mongoose-id-validator@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/mongoose-id-validator/-/mongoose-id-validator-0.5.3.tgz#9dfa4512d70a952f757a4e580e405e5f2a420ec1"
+  integrity sha512-TEsB3KRmAPIEMchSQogMsLo1IS4jJMFyjI988dzq+lqDR2wxR+LyGYrhtjRhMMrVOIaoS2y7lQLq9B6FhEAeWA==
   dependencies:
     clone "^1.0.2"
     traverse "^0.6.6"
