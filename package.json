@@ -49,7 +49,7 @@
     "react-mini-router": "^2.0.0",
     "superagent": "^5.0.2",
     "sweetalert2": "^4.1.9",
-    "validator": "^5.5.0"
+    "validator": "^11.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
