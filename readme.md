@@ -1,6 +1,8 @@
 # Festival
 
-Self-hosted photo and video gallery written in Node.js.
+> Self-hosted photo and video gallery written in Node.js.
+
+⚠️ This project is currently unmaintained. Feel free to send PRs/issues though.
 
 ## Features
 
